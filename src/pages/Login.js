@@ -1,59 +1,98 @@
 import React from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { FaSignInAlt } from "react-icons/fa";
+import { login, reset } from "../features/auth/authSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import Input from "../components/Input";
+import { Formik, Form, ErrorMessage } from "formik";
+import validateLogin from "../validations/loginValidations";
+import * as Yup from "yup";
 
 function Login() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  const { name, email, password, password2 } = formData;
+  const [showPass, setShowPass] = useState(false);
 
-  const onChange = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth,
+  );
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+    dispatch(reset());
+  }, [user, navigate, dispatch]);
+  const submit = (e) => {
+    const userDate = {
+      email: e.email,
+      password: e.password,
+    };
+    console.log(userDate);
+    dispatch(login(userDate));
   };
-  const onSubmit = (e) => {
-    e.preventDefault();
+  const revealPass = () => {
+    setShowPass(!showPass);
   };
-  console.log(formData);
+
   return (
-    <div>
-      <h1>
-        <FaSignInAlt /> Login
-      </h1>
-      <p>Login</p>
-      <section>
-        <form onSubmit={onSubmit}>
-          <div>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={onChange}
-              placeholder="enter your email"
-            />
+    <Formik
+      initialValues={{ email: "", password: "" }}
+      validationSchema={validateLogin}
+      onSubmit={(data) => {
+        submit(data);
+      }}
+    >
+      {(formik) => (
+        <div className="h-screen	flex items-center justify-center">
+          <div class="w-full max-w-xs">
+            <Form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 relative">
+              <Input
+                label="Email"
+                placeholder="Email"
+                type="Email"
+                id="email"
+                name="email"
+              />{" "}
+              <Input
+                label="password"
+                placeholder="password"
+                type={showPass ? "text" : "password"}
+                showPass={showPass}
+                id="password"
+                revealpass={revealPass}
+                name="password"
+              />{" "}
+              <p className="text-red-500 text-xs italic mb-2 ">{message}</p>
+              <div class="flex items-center justify-between ">
+                <button
+                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  type="submit"
+                >
+                  Sign In
+                </button>
+                <a
+                  class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+                  href="#"
+                >
+                  Forgot Password?
+                </a>
+              </div>
+            </Form>
+            <p class="text-center font-bold text-gray-500 text-m">
+              Don't have an account?{" "}
+              <span className="text-red-500 font-bold">
+                {" "}
+                <Link to="/register">Register now!</Link>
+              </span>
+            </p>
           </div>
-          <div>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={password}
-              onChange={onChange}
-              placeholder="enter your password"
-            />
-          </div>
-
-          <div>
-            <button type="submit">submit</button>
-          </div>
-        </form>
-      </section>
-    </div>
+        </div>
+      )}
+    </Formik>
   );
 }
 
