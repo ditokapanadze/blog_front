@@ -7,7 +7,7 @@ const register = async (userData) => {
   );
 
   if (response.data) {
-    console.log(response.data);
+    console.log(response.data.token);
     localStorage.setItem("authToken", JSON.stringify(response.data.token));
   }
 
@@ -20,8 +20,8 @@ const login = async (userDate) => {
     userDate,
   );
   if (response.data) {
-    console.log(response.data);
-    localStorage.setItem("authToken", JSON.stringify(response.data.token));
+    console.log(response.data.token);
+    localStorage.setItem("authToken", response.data.token);
   }
   return response.data;
 };

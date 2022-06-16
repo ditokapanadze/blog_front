@@ -3,17 +3,22 @@ import authService from "./authService";
 import decode from "jwt-decode";
 
 // get user from localstorage
-const user = JSON.parse(localStorage.getItem("user"));
+
 const parseUSer = () => {
   const token = localStorage.getItem("authToken");
   if (!token) {
-    return false;
+    return null;
   }
-  const user = decode(token);
-  delete user["iat"];
-  delete user["verified"];
+  try {
+    const user = decode(token);
+    delete user["iat"];
+    delete user["verified"];
 
-  return user;
+    return user;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
 };
 
 const initialState = {
@@ -85,6 +90,7 @@ export const authSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
         state.user = null;
+        console.log(action.payload);
       })
       .addCase(logout.fulfilled, (state) => {
         state.isLoading = false;
@@ -105,9 +111,8 @@ export const authSlice = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload;
         state.user = null;
-        console.log(action.payload);
+        state.message = action.payload;
       });
   },
 });

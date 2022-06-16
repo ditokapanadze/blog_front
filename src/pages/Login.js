@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import Input from "../components/Input";
 import { Formik, Form, ErrorMessage } from "formik";
 import validateLogin from "../validations/loginValidations";
-import * as Yup from "yup";
+import Spinner from "../components/Spinnr";
 
 function Login() {
   const [showPass, setShowPass] = useState(false);
@@ -20,18 +20,18 @@ function Login() {
     (state) => state.auth,
   );
 
-  useEffect(() => {
-    if (user) {
-      navigate("/");
-    }
-    dispatch(reset());
-  }, [user, navigate, dispatch]);
+  // useEffect(() => {
+  //   if (user) {
+  //     navigate("/");
+  //   }
+  //   dispatch(reset());
+  // }, [user, navigate, dispatch]);
   const submit = (e) => {
     const userDate = {
       email: e.email,
       password: e.password,
     };
-    console.log(userDate);
+
     dispatch(login(userDate));
   };
   const revealPass = () => {
@@ -48,8 +48,8 @@ function Login() {
     >
       {(formik) => (
         <div className="h-screen	flex items-center justify-center">
-          <div class="w-full max-w-xs">
-            <Form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 relative">
+          <div className="w-full max-w-xs">
+            <Form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 relative">
               <Input
                 label="Email"
                 placeholder="Email"
@@ -68,21 +68,26 @@ function Login() {
               />{" "}
               <p className="text-red-500 text-xs italic mb-2 ">{message}</p>
               <div class="flex items-center justify-between ">
-                <button
-                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                  type="submit"
-                >
-                  Sign In
-                </button>
+                {isLoading ? (
+                  <Spinner />
+                ) : (
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    type="submit"
+                  >
+                    Sign In
+                  </button>
+                )}
+
                 <a
-                  class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+                  className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
                   href="#"
                 >
                   Forgot Password?
                 </a>
               </div>
             </Form>
-            <p class="text-center font-bold text-gray-500 text-m">
+            <p className="text-center font-bold text-gray-500 text-m">
               Don't have an account?{" "}
               <span className="text-red-500 font-bold">
                 {" "}

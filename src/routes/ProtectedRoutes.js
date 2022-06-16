@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 
 function ProtectedRoutes() {
   const location = useLocation();
-  console.log(location.pathname);
+
   const auth = useAuth();
 
   switch (auth) {
@@ -17,6 +17,8 @@ function ProtectedRoutes() {
       // }
       return <Outlet />;
     case false:
+      console.log("test");
+      localStorage.removeItem("authToken");
       return <Navigate to="/login" />;
     default:
       return;

@@ -11,13 +11,13 @@ import Router from "./routes/Router";
 
 function App() {
   return (
-    <>
+    <div className="container max-w-xxl">
       {" "}
       <BrowserRouter>
         {" "}
         <Router />
       </BrowserRouter>
-    </>
+    </div>
   );
 }
 

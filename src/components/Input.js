@@ -11,7 +11,7 @@ function Input({
   ...props
 }) {
   const [field] = useField(props);
-  console.log(showPass);
+
   const renderIcon = () => {
     if (props.name === "password" && !showPass) {
       return (

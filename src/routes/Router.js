@@ -5,6 +5,7 @@ import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
 import ProtectedRoutes from "./ProtectedRoutes";
 import { HideRoute } from "./ProtectedRoutes";
+import SinglePost from "../pages/SinglePost";
 
 function Router() {
   return (
@@ -16,6 +17,7 @@ function Router() {
         </Route>{" "}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />{" "}
+        <Route path="/post/:uuid" element={<SinglePost />} />{" "}
       </Routes>
     </>
   );
