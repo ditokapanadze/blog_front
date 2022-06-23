@@ -17,7 +17,7 @@ function Post({ title, text, photoUrl, uuid, single }) {
   //     count = 0;
   //   }
   // });
-  console.log(single);
+
   const showMore = () => {
     const myInterval = setInterval(() => {
       setExp((prevState) => prevState + 1);
